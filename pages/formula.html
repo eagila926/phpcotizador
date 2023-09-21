@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <link rel="shortcut icon" href="images/favicon.ico">
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="">
+	<meta name="author" content="">
+	<title>Escollanos</title>
+	<!-- Bootstrap Core CSS -->
+	<link href="assets/bootstrap/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+	<link href="assets/datatables-plugins/dataTables.bootstrap.css" rel="stylesheet">
+	<!-- DataTables Responsive CSS -->
+	<link href="assets/datatables-responsive/dataTables.responsive.css" rel="stylesheet">
+	<!-- MetisMenu CSS -->
+	<link href="assets/metisMenu/metisMenu.min.css" rel="stylesheet">
+	<!-- Morris Charts CSS -->
+	<link href="assets/morrisjs/morris.css" rel="stylesheet">
+	<!-- Custom Fonts -->
+	<link href="assets/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+	<link href="assets/css/index.css" rel="stylesheet">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+	<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.1/jquery-ui.min.js"></script>
+    <script src="assets/bootstrap/bootstrap/js/bootstrap.min.js"></script>
+    
+</head>
+<body>
+    {menufarmacia}
+
+    <div class="container text-center:">
+        
+        <div class="col-md-10">
+            <h1>Agregar Fórmula</h1>
+            <div class="panel panel-default">
+                <div class="panel-heading"><strong class="panel-title">Formula no establecida</strong></div>
+                    <div class="panel-body">
+
+                        <form id="formulaForm">
+        
+                            <!-- Campo "activos" como un arreglo de cadenas -->
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <div class="form-group">
+                                            <label for="activos">Activo:</label>
+                                            <input type="text" class="form-control" id="activos" name="activos" 
+                                                    placeholder="Ingrese el nombre del activo" autocomplete="off">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label>Cantidad</label>
+                                        <input type="text" class="form-control" name="cant"
+                                                   placeholder="Ingrese la cantidad" autocomplete="off" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label>Unidad</label>
+                                        <select class= "form-control" name="unidad">
+                                            <option value=""></option>
+                                            <option value="g">g</option>
+                                            <option value="mg">mg</option>
+                                            <option value="mcg">mcg</option>
+                                            <option value="UI">UI</option>
+                                        </select>
+                                    </div>
+
+                                </div>
+                              </div>
+
+                            <input type="hidden" id="activosIngresados" name="activosIngresados" value="">
+
+                            
+                            <button type="button" class="btn btn-primary btn-flat btnAgregar" style="margin-left:90px"><i class="fas fa-save"></i> Agregar Activo</button>
+                            <button type="button" class="btn btn-primary btn-flat btnCotizar" style="margin-left: 90px" data-toggle="modal" data-target="#modalCotizacion"><i class="fas fa-save"></i> Cotizar</button>
+
+                        </form>
+                        <!-- Tabla para mostrar los activos ingresados -->
+                        <h2>Activos Ingresados</h2>
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Activo</th>
+                                    <th>Cantidad</th>
+                                    <th>Unidad</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tablaActivos">
+                                <!-- Las filas de activos se agregarán aquí con JavaScript -->
+                            </tbody>
+                        </table>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para cotización -->
+    <div class="modal fade" id="modalCotizacion" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Cotización</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- Formulario para agregar los datos de la tabla formula -->
+                    <form id="cotizacionForm" action="formula.php" method="POST">
+                        <div class="form-group">
+                            <label for="codigo">Código de la fórmula:</label>
+                            <input type="text" class="form-control" id="codigo" name="codigo" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="nombre">Nombre:</label>
+                            <input type="text" class="form-control" id="nombre" name="nombre" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="dias">Días del tratamiento:</label>
+                            <input type="number" class="form-control" id="dias" name="dias" required>
+                        </div>
+                        <!-- Otros campos del formulario aquí -->
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                    </form>                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Arreglo para almacenar los activos ingresados
+        activosIngresados = [];
+        
+        // Función para agregar el activo a la tabla
+        function agregarActivoATabla() {
+            var activo = document.getElementById("activos").value;
+            var cantidad = document.querySelector('input[name="cant"]').value;
+            var unidad = document.querySelector('select[name="unidad"]').value;
+    
+            if (activo && cantidad && unidad) {
+                // Agregar el activo al arreglo
+                activosIngresados.push({ activo, cantidad, unidad });
+    
+                // Agregar el activo a la tabla
+                var tabla = document.getElementById("tablaActivos");
+                var fila = tabla.insertRow();
+                var celdaActivo = fila.insertCell(0);
+                var celdaCantidad = fila.insertCell(1);
+                var celdaUnidad = fila.insertCell(2);
+    
+                celdaActivo.innerHTML = activo;
+                celdaCantidad.innerHTML = cantidad;
+                celdaUnidad.innerHTML = unidad;
+    
+                // Limpiar los campos del formulario
+                limpiarCampos();
+            } else {
+                alert("Por favor, complete todos los campos antes de agregar el activo.");
+            }
+        }
+    
+        // Función para limpiar los campos del formulario
+        function limpiarCampos() {
+            document.getElementById("activos").value = "";
+            document.querySelector('input[name="cant"]').value = "";
+            document.querySelector('select[name="unidad"]').value = "";
+        }
+    
+        // Asignar el evento de clic al botón "Agregar Activo"
+        var btnAgregar = document.querySelector(".btnAgregar");
+        btnAgregar.addEventListener("click", agregarActivoATabla);
+    
+        // Asignar el evento de clic al botón "Cotizar"
+        var btnCotizar = document.querySelector(".btnCotizar");
+        btnCotizar.addEventListener("click", function() {
+            // Antes de abrir el modal, actualiza el campo oculto con los datos de activosIngresados
+            document.getElementById("activosIngresados").value = JSON.stringify(activosIngresados);
+            console.log("activos:",activosIngresados);
+        });
+    </script>
+    
+
+
+</body>
+</html>
