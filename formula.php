@@ -3,6 +3,17 @@ require_once('config/config.php'); // Incluye el archivo de configuración
 
 include ('include/header.php');
 
+$sql2 = "SELECT * FROM activos WHERE descripcion = :descripcion"; // Corregido: la sintaxis SQL estaba incorrecta
+
+$sth2 = FETCH_SQL($sql2);
+$sth2->bindParam(':descripcion', $descripcion, PDO::PARAM_STR);
+$sth2->execute();
+
+while ($result = $sth2->fetch(PDO::FETCH_OBJ)) {
+    echo $result->activo; // Asumiendo que hay una columna llamada "activo" en la tabla activos
+}
+
+
 $activosIngresados = [];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -15,23 +26,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $activosIngresadosJSON = $_POST['activosIngresados'];
     $activosIngresados = json_decode($activosIngresadosJSON, true);
 
+    // Formatear los datos en la notación adecuada para PostgreSQL
+    $activosIngresadosTexto = '{';
+    $activos = [];
+
+    foreach ($activosIngresados as $activo) {
+        $activos[] = sprintf('"%s","%s","%s","%s"', $activo['codOdoo'], $activo['activo'], $activo['cantidad'], $activo['unidad']);
+    }
+
+    $activosIngresadosTexto .= implode(',', $activos);
+    $activosIngresadosTexto .= '}';
+
     // Insertar los datos en la tabla formula
     $sql = "INSERT INTO formula (cod_formula, nombre, dias, activos) VALUES (:cod_formula, :nombre, :dias, :activos)";
     $stmt = $conexion->prepare($sql);
     $stmt->bindParam(':cod_formula', $codigo);
     $stmt->bindParam(':nombre', $nombre);
     $stmt->bindParam(':dias', $dias);
-    $stmt->bindParam(':activos', $activosIngresados);
+    $stmt->bindParam(':activos', $activosIngresadosTexto, PDO::PARAM_STR);
 
     if ($stmt->execute()) {
         // Éxito
-        echo "Cotización guardada con éxito.";
+        echo '<script>console.log("Cotización guardada con éxito.")</script>';
     } else {
         // Error
         echo "Error al guardar la cotización.";
     }
 }
-
 
 $html = file_get_contents("pages/formula.html");
 $html = str_replace('{menufarmacia}', $menufarmacia, $html);
