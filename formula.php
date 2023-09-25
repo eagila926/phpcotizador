@@ -3,16 +3,6 @@ require_once('config/config.php'); // Incluye el archivo de configuración
 
 include ('include/header.php');
 
-$sql2 = "SELECT * FROM activos WHERE descripcion = :descripcion"; // Corregido: la sintaxis SQL estaba incorrecta
-
-$sth2 = FETCH_SQL($sql2);
-$sth2->bindParam(':descripcion', $descripcion, PDO::PARAM_STR);
-$sth2->execute();
-
-while ($result = $sth2->fetch(PDO::FETCH_OBJ)) {
-    echo $result->activo; // Asumiendo que hay una columna llamada "activo" en la tabla activos
-}
-
 
 $activosIngresados = [];
 

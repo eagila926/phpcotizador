@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<link rel="shortcut icon" href="images/favicon.ico">
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="">
+	<meta name="author" content="">
+	<title>Escollanos</title>
+	<!-- Bootstrap Core CSS -->
+	<link href="assets/bootstrap/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+	<link href="assets/datatables-plugins/dataTables.bootstrap.css" rel="stylesheet">
+	<!-- DataTables Responsive CSS -->
+	<link href="assets/datatables-responsive/dataTables.responsive.css" rel="stylesheet">
+	<!-- MetisMenu CSS -->
+	<link href="assets/metisMenu/metisMenu.min.css" rel="stylesheet">
+	<!-- Morris Charts CSS -->
+	<link href="assets/morrisjs/morris.css" rel="stylesheet">
+	<!-- Custom Fonts -->
+	<link href="assets/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+	<link href="assets/css/index.css" rel="stylesheet">
+</head>
+<body>
+	{menufarmacia}
+	<div class="row">
+		<br>
+		<div class="col-lg-1"></div>
+		<div class="col-lg-9">
+			<h2>Formula: {nombre}</h2>
+			<h2>Dias de tratamiento: {dias}</h2>
+			<table class="table table-bordered" id="tablaResumen">
+				<thead>
+					<tr>
+						<th>Codigo Odoo</th>
+						<th>Activo</th>
+						<th>Cantidad</th>
+						<th>Unidad</th>
+					</tr>
+				</thead>
+				<tbody>
+					<!-- Las filas de activos se agregarán aquí con JavaScript -->
+				</tbody>
+			</table>
+		</div>
+		<div class="col-lg-1"></div>
+
+        <!-- Agrega tabla de resumen y operaciones-->
+
+        <div class="row">
+            <br>
+            <div class="col-lg-1"></div>
+            <div class="col-lg-11" style="margin-left:50px">
+                <table class="table table-bordered" id="tablaDetallesActivos">
+                    <thead>
+                        <tr>
+                            <th>Codigo</th>
+                            <th>Descripción</th>
+                            <th>Unidad Compra</th>
+                            <th>Factor</th>
+                            <th>Densidad</th>
+                            <th>Tipo</th>
+                            <!-- Agrega aquí las columnas adicionales que quieras mostrar -->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Las filas de activos se agregarán aquí con JavaScript -->
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+        
+	</div>
+	
+</body>
+<br><br><br><br>
+<div class="footer">
+	<p>2022 © Escollanos | Comercialización </p>
+</div>
+</html>

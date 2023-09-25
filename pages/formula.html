@@ -24,6 +24,8 @@
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 	<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.1/jquery-ui.min.js"></script>
     <script src="assets/bootstrap/bootstrap/js/bootstrap.min.js"></script>
+
+
     
 </head>
 <body>
@@ -49,6 +51,7 @@
                                                     placeholder="Ingrese el nombre del activo" autocomplete="off">
                                         </div>
                                     </div>
+                                    <div id="suggestions_p" style="float:left;"></div>
                                 </div>
                             </div>
                             
@@ -80,9 +83,10 @@
                         </form>
                         <!-- Tabla para mostrar los activos ingresados -->
                         <h2>Activos Ingresados</h2>
-                        <table class="table table-bordered">
+                        <table class="table table-bordered" id="tablaActivos">
                             <thead>
                                 <tr>
+                                    <th>Codigo Odoo</th>
                                     <th>Activo</th>
                                     <th>Cantidad</th>
                                     <th>Unidad</th>
@@ -111,7 +115,7 @@
                 </div>
                 <div class="modal-body">
                     <!-- Formulario para agregar los datos de la tabla formula -->
-                    <form id="cotizacionForm" action="formula.php" method="POST">
+                    <form id="cotizacionForm" action="resumenFormula.php" method="POST">
                         <div class="form-group">
                             <label for="codigo">Código de la fórmula:</label>
                             <input type="text" class="form-control" id="codigo" name="codigo" autocomplete="off" required>
@@ -137,105 +141,115 @@
     </div>
 
     <script>
-        // Arreglo para almacenar los activos ingresados
-        activosIngresados = [];
-
-        $(function () {
-
-            $('input[name="activos"]').autocomplete({
-                source: function(request, response) {
-                    // Realiza una solicitud AJAX para buscar activos en la base de datos
-                    $.ajax({
-                        url: 'formula.php',
-                        data: {
-                            term: request.term
-                        },
-                        dataType: 'json',
-                        success: function(data) {
-                            response(data); // Muestra las sugerencias de autocompletado
+        // Declarar una variable global para almacenar cod_inven
+         var codInvenSeleccionado = 0;
+         activosIngresados = []; // Declarar activosIngresados como un arreglo vacío
+     
+         $(document).ready(function () {
+             var producto;
+     
+             $('#suggestions_p').fadeOut(100);
+             $("#activos").keyup(function (e) {
+                 producto = $("#activos").val();
+                 $.ajax({
+                     type: "POST",
+                     url: "../assets/js/buscarProducto.php",
+                     data: "producto=" + producto,
+                     success: function (data) {
+                         if (data == "") {
+                             $('#suggestions_p').fadeOut(500);
+                         } else {
+                             $('#suggestions_p').fadeIn(500).html(data);
+                             $('.suggest-element').click(function (e) {
+                                 // Obtener el valor de cod_inven
+                                 codInvenSeleccionado = $(this).data('cod_inven');
+                                 console.log("Texto del elemento seleccionado:", $(this).text());
+                                 console.log("cod_inven seleccionado:", codInvenSeleccionado);
+     
+                                 // Editar el valor del campo activos con la descripción de la sugerencia pulsada
+                                 $('#activos').val($(this).text());
+                                 // Ocultar el resto de sugerencias
+                                 $('#suggestions_p').fadeOut(100);
+                                 $('#activos').focus();
+                             });
+     
+                             // Resto de funciones
+                             function agregarActivoATabla() {
+                                var activo = $("#activos").val(); // Obtener el valor del campo activos
+                                var cantidad = $("#cant").val(); // Obtener el valor del campo cant
+                                var unidad = $("select[name='unidad']").val(); // Obtener el valor del campo unidad
+                            
+                                console.log("activo:", activo);
+                                console.log("cantidad:", cantidad);
+                                console.log("unidad:", unidad);
+                                console.log("codInvenSeleccionado:", codInvenSeleccionado);
+                            
+                                if (codInvenSeleccionado && activo && cantidad && unidad) {
+                                    // Agregar el activo al arreglo con cod_inven
+                                    activosIngresados.push({
+                                        codOdoo: codInvenSeleccionado,
+                                        activo: activo,
+                                        cantidad: cantidad,
+                                        unidad: unidad
+                                    });
+                            
+                                    // Agregar el activo a la tabla
+                                    var tabla = document.getElementById("tablaActivos");
+                                    var fila = tabla.insertRow();
+                                    var celdaCodOdoo = fila.insertCell(0);
+                                    var celdaActivo = fila.insertCell(1);
+                                    var celdaCantidad = fila.insertCell(2);
+                                    var celdaUnidad = fila.insertCell(3);
+                            
+                                    celdaCodOdoo.innerHTML = codInvenSeleccionado;
+                                    celdaActivo.innerHTML = activo;
+                                    celdaCantidad.innerHTML = cantidad;
+                                    celdaUnidad.innerHTML = unidad;
+                            
+                                    // Limpiar los campos del formulario
+                                    limpiarCampos();
+                                } else {
+                                    //alert("Por favor, complete todos los campos antes de agregar el activo.");
+                                }
+                            }                        
+    
+                             // Asignar el evento de clic al botón "Agregar Activo"
+                             var btnAgregar = document.querySelector(".btnAgregar");
+                             btnAgregar.addEventListener("click", agregarActivoATabla);
+     
+                             // Función para limpiar los campos del formulario
+                             function limpiarCampos() {
+                                 $("#activos").val(""); // Limpiar el campo activos
+                                 $("#cant").val(""); // Limpiar el campo cant
+                                 $("select[name='unidad']").val(""); // Limpiar el campo unidad
+                             }
+     
+                             // Asignar el evento de clic al botón "Cotizar"
+                             var btnCotizar = document.querySelector(".btnCotizar");
+                             btnCotizar.addEventListener("click", function () {
+                                 // Antes de abrir el modal, actualiza el campo oculto con los datos de activosIngresados
+                                 document.getElementById("activosIngresados").value = JSON.stringify(activosIngresados);                                                        
+                            });
                         }
-                    });
-                },
-                delay: 500,
-                minLength: 1,
-                select: function(event, ui) {
-                    event.preventDefault();
-                    var codInven = ui.item.cod_inven;
-                    var descripcion = ui.item.descripcion;
-            
-                    // Agrega el activo seleccionado al arreglo
-                    activosIngresados.push({
-                        cod_inven: codInven,
-                        descripcion: descripcion
-                    });
-            
-                    // Puedes hacer lo que necesites con el arreglo activosIngresados aquí
-                    console.log(activosIngresados);
-    
-    
-                    // Función para agregar el activo a la tabla
-                function agregarActivoATabla() {
-                    var codOdoo = cod_inven;
-                    var activo = descripcion;
-                    var cantidad = document.querySelector('input[name="cant"]').value;
-                    var unidad = document.querySelector('select[name="unidad"]').value;
-            
-                    if (codOdoo && activo && cantidad && unidad) {
-                        // Agregar el activo al arreglo
-                        activosIngresados.push({ codOdoo, activo, cantidad, unidad });
-            
-                        // Agregar el activo a la tabla
-                        var tabla = document.getElementById("tablaActivos");
-                        var fila = tabla.insertRow();
-                        var celdaCodOdoo = fila.insertCell(0);
-                        var celdaActivo = fila.insertCell(1);
-                        var celdaCantidad = fila.insertCell(2);
-                        var celdaUnidad = fila.insertCell(3);
-            
-                        celdaCodOdoo.innerHTML = codOdoo;
-                        celdaActivo.innerHTML = activo;
-                        celdaCantidad.innerHTML = cantidad;
-                        celdaUnidad.innerHTML = unidad;
-            
-                        // Limpiar los campos del formulario
-                        limpiarCampos();
-                    } else {
-                        alert("Por favor, complete todos los campos antes de agregar el activo.");
                     }
-
-                    
-                }
-
-                // Función para limpiar los campos del formulario
-                function limpiarCampos() {
-                    document.getElementById("codOdoo").value = "";
-                    document.getElementById("activos").value = "";
-                    document.querySelector('input[name="cant"]').value = "";
-                    document.querySelector('select[name="unidad"]').value = "";
-                }
-            
-                // Asignar el evento de clic al botón "Agregar Activo"
-                var btnAgregar = document.querySelector(".btnAgregar");
-                btnAgregar.addEventListener("click", agregarActivoATabla);
-    
-    
-            }
+                });
+            });
         });
-    }); 
-        
+       
+     </script>
     
-        // Asignar el evento de clic al botón "Cotizar"
-        var btnCotizar = document.querySelector(".btnCotizar");
-        btnCotizar.addEventListener("click", function() {
-            // Antes de abrir el modal, actualiza el campo oculto con los datos de activosIngresados
-            document.getElementById("activosIngresados").value = JSON.stringify(activosIngresados);
-            console.log("activos:",activosIngresados);
-        });
-
-
-    </script>
     
-
-
+    <script src="assets/datatables/js/jquery.dataTables.min.js"></script>
+	<script src="assets/datatables-plugins/dataTables.bootstrap.min.js"></script>
+	<script src="assets/datatables-responsive/dataTables.responsive.js"></script>
+	<script>
+		$(document).ready(function () {
+			$('#tablaActivos').DataTable({
+				responsive: true,
+				"order": [[0, "desc"]]
+			});
+		});
+	</script>
+    
 </body>
 </html>
