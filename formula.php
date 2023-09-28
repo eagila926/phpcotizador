@@ -32,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt = $conexion->prepare($sql);
     $stmt->bindParam(':cod_formula', $codigo);
     $stmt->bindParam(':nombre', $nombre);
-    $stmt->bindParam(':dias', $dias);
+    $stmt->bindParam(':dias', $dias); 
     $stmt->bindParam(':activos', $activosIngresadosTexto, PDO::PARAM_STR);
 
     if ($stmt->execute()) {
