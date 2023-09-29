@@ -180,9 +180,6 @@
                                 $('#suggestions_p').fadeOut(100);
                                 $('#activos').focus();
                             });
-
-                            // Resto de funciones
-
                         }
                     }
                 });
@@ -201,7 +198,7 @@
 
             if (codInvenSeleccionado && activo && cantidad && unidad) {
                 // Agregar el activo al arreglo con cod_inven
-                console.log("entre al if");
+                console.log("entre al if", activosIngresados);
                 activosIngresados.push({
                     codOdoo: codInvenSeleccionado,
                     activo: activo,

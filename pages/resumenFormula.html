@@ -30,6 +30,7 @@
 		<div class="col-lg-9">
 			<h2>Formula: {nombre}</h2>
 			<h2>Dias de tratamiento: {dias}</h2>
+			<h2>Dosis diaria: {cDiaria}</h2>
 			<table class="table table-bordered" id="tablaResumen">
 				<thead>
 					<tr>
@@ -52,19 +53,19 @@
             <br>
             <div class="col-lg-1"></div>
             <div class="col-lg-11" style="margin-left:50px">
+				
                 <table class="table table-bordered" id="tablaDetalles">
                     <thead>
                         <tr>
                             <th>Codigo</th>
                             <th>Descripción</th>
-                            <th>Unidad Compra</th>
+                            <th>Cantidad(g)</th>
+                            <th>Unidad</th>
                             <th>Factor</th>
                             <th>Densidad</th>
-                            <th>Tipo</th>
                             <th>mf C</th>
-                            <th>mf F</th>
                             <th>v C</th>
-                            <th>v F</th>
+							<th>mf F</th>
                             
                         </tr>
                     </thead>
