@@ -26,6 +26,10 @@
     <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.1/jquery-ui.min.js"></script>
     <script src="assets/bootstrap/bootstrap/js/bootstrap.min.js"></script>
 
+    <script src="assets/datatables/js/jquery.dataTables.min.js"></script>
+    <script src="assets/datatables-plugins/dataTables.bootstrap.min.js"></script>
+    <script src="assets/datatables-responsive/dataTables.responsive.js"></script>
+
 
 
 </head>
@@ -80,9 +84,9 @@
                         </div>
 
                         <button type="button" class="btn btn-primary btn-flat btnAgregar" style="margin-left:90px"><i
-                                class="fas fa-save"></i> Agregar Activo</button>
+                                class="fa fa-plus"></i> Agregar Activo</button>
                         <button type="button" class="btn btn-primary btn-flat btnCotizar" style="margin-left: 90px"
-                            data-toggle="modal" data-target="#modalCotizacion"><i class="fas fa-save"></i>
+                            data-toggle="modal" data-target="#modalCotizacion"><i class="fa fa-save"></i>
                             Cotizar</button>
 
                     </form>
@@ -147,6 +151,17 @@
             </div>
         </div>
     </div>
+
+    
+    <script>
+
+        $(document).ready(function () {
+            $('#tablaActivos').DataTable({
+                responsive: true,
+                "order": [[0, "desc"]]
+            });
+        });
+    </script>
 
     <script>
         // Declarar una variable global para almacenar cod_inven
@@ -254,18 +269,7 @@
     </script>
 
 
-    <script src="assets/datatables/js/jquery.dataTables.min.js"></script>
-    <script src="assets/datatables-plugins/dataTables.bootstrap.min.js"></script>
-    <script src="assets/datatables-responsive/dataTables.responsive.js"></script>
-    <script>
-
-        $(document).ready(function () {
-            $('#tablaActivos').DataTable({
-                responsive: true,
-                "order": [[0, "desc"]]
-            });
-        });
-    </script>
+    
 
 </body>
 
