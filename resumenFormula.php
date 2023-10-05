@@ -7,7 +7,7 @@ $nombreFormula = $_POST['nombre'];
 $diasTratamiento = $_POST['dias'];
 $activosIngresados = json_decode($_POST['activosIngresados'], true); // Decodifica la cadena JSON
 
-// Luego, puedes generar la página de resumen (resumenFormula.html) con los datos
+// Luego, puedes gen    |erar la página de resumen (resumenFormula.html) con los datos
 $html = file_get_contents("pages/resumenFormula.html");
 $html = str_replace('{menufarmacia}', $menufarmacia, $html);
 $html = str_replace('{nombre}', $nombreFormula, $html);

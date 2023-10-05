@@ -1,187 +1,187 @@
 <!DOCTYPE html>
 <html lang="es">
-	<head>
-		<link rel="shortcut icon" href="">
-		<meta charset="utf-8">
-		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<meta name="description" content="">
-		<meta name="author" content="">
-		<title>Escollanos</title>
-		<!-- Bootstrap Core CSS -->
-		<link href="assets/bootstrap/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-		<link href="assets/datatables-plugins/dataTables.bootstrap.css" rel="stylesheet">
-		<!-- DataTables Responsive CSS -->
-		<link href="assets/datatables-responsive/dataTables.responsive.css" rel="stylesheet">
-		<!-- MetisMenu CSS -->
-		<link href="assets/metisMenu/metisMenu.min.css" rel="stylesheet">
-		<!-- Morris Charts CSS -->
-		<link href="assets/morrisjs/morris.css" rel="stylesheet">
-		<!-- Custom Fonts -->
-		
-	
-		<link href="assets/css/index.css" rel="stylesheet">
-		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-		<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.1/jquery-ui.min.js"></script>
-		<script src="assets/bootstrap/bootstrap/js/bootstrap.min.js"></script>
-	
-		<script src="assets/datatables/js/jquery.dataTables.min.js"></script>
-		<link href="assets/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-		<script src="assets/datatables-plugins/dataTables.bootstrap.min.js"></script>
-		<script src="assets/datatables-responsive/dataTables.responsive.js"></script>
-
-	</head>
-	
+<head>
+    <link rel="shortcut icon" href="">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Escollanos</title>
+    <!-- Bootstrap Core CSS -->
+    <link href="assets/bootstrap/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="assets/datatables-plugins/dataTables.bootstrap.css" rel="stylesheet">
+    <!-- DataTables Responsive CSS -->
+    <link href="assets/datatables-responsive/dataTables.responsive.css" rel="stylesheet">
+    <!-- MetisMenu CSS -->
+    <link href="assets/metisMenu/metisMenu.min.css" rel="stylesheet">
+    <!-- Morris Charts CSS -->
+    <link href="assets/morrisjs/morris.css" rel="stylesheet">
+    <!-- Custom Fonts -->
+    <link href="assets/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+</head>
 <body>
-	{menufarmacia}
-	<div class="row">
-		<br>
-		<div class="col-lg-1"></div>
-		<div class="col-lg-11" style="margin-left:50px">
-			<h3>Activos</h3>
-			<div class="table-responsive">
-				<table class="table table-bordered" id="tablaInventario">
-					<thead>
-						<tr>
-							<th>Acciones</th>
-							<th>Codigo</th>
-							<th>Descripción</th>
-							<th>Unidad Compra</th>
-							<th>Factor</th>
-							<th>Densidad</th>
-							<th>Stock</th>                            
-						</tr>
-					</thead>
-					<tbody>
-						{tablaInventario}
-						<i class="fas fa-camera"></i>
-					</tbody>
-				</table>
-			</div>
-		</div>
-	</div>
+    <!-- Your menu content here -->
+    {menufarmacia}
 
-	<!-- Modal -->
-	<div class="modal fade" id="editarActivo" tabindex="-1" role="dialog" aria-labelledby="editarActivoLabel" aria-hidden="true">
-		<div class="modal-dialog" role="document">
-		<div class="modal-content">
-			<!-- Modal Content -->
-			<div class="modal-header">
-			<h5 class="modal-title" id="editarActivoLabel">Editar Activo</h5>
-			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-				<span aria-hidden="true">&times;</span>
-			</button>
-			</div>
-			<div class="modal-body">
-			<form id="editAssetForm">
-				<div class="form-group">
-					<label for="cod_inven">Codigo Odoo:</label>
-					<input type="text" class="form-control diseable" id="cod_inven" name="cod_inven" autocomplete="off"
-						required>
-				</div>
-				<div class="form-group">
-					<label for="descripcion">Activo:</label>
-					<input type="text" class="form-control" id="descripcion" name="descripcion" autocomplete="off"
-						required>
-				</div>
-				<div class="form-group">
-					<label for="factor">Factor:</label>
-					<input type="number" class="form-control" id="factor" name="factor" required>
-				</div>
-				<div class="form-group">
-					<label for="densidad">Densidad:</label>
-					<input type="number" class="form-control" id="densidad" name="densidad" required>
-				</div>
-				<div class="form-group">
-					<label for="stock">Stock:</label>
-					<input type="number" class="form-control" id="stock" name="stock" required>
-				</div>
+    <div class="row">
+        <br>
+        <div class="col-lg-1"></div>
+        <div class="col-lg-11" style="margin-left:50px">
+            <h3>Activos</h3>
+            <div class="table-responsive">
+                <table class="table table-bordered" id="tablaInventario">
+                    <thead>
+                        <tr>
+                            <th>Acciones</th>
+                            <th>Codigo</th>
+                            <th>Descripción</th>
+                            <th>Unidad Compra</th>
+                            <th>Factor</th>
+                            <th>Densidad</th>
+                            <th>Stock</th>                            
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {tablaInventario}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 
-			</form>
-			</div>
-			<div class="modal-footer">
-			<button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-			<button type="button" class="btn btn-primary" id="saveChangesButton">Guardar Cambios</button>
-			</div>
-		</div>
-		</div>
-	</div>
+    <!-- Modal -->
+    <div class="modal fade" id="editarActivo" tabindex="-1" role="dialog" aria-labelledby="editarActivoLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <!-- Modal Content -->
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editarActivoLabel">Editar Activo</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="editAssetForm">
+                        <div class="form-group">
+                            <label for="cod_inven">Codigo Odoo:</label>
+                            <input type="text" class="form-control" id="cod_inven" name="cod_inven" autocomplete="off" readonly required>
+                        </div>
+                        <div class="form-group">
+                            <label for="descripcion">Activo:</label>
+                            <input type="text" class="form-control" id="descripcion" name="descripcion" autocomplete="off" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="factor">Factor:</label>
+                            <input type="number" class="form-control" id="factor" name="factor" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="densidad">Densidad:</label>
+                            <input type="number" class="form-control" id="densidad" name="densidad" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="stock">Stock:</label>
+                            <input type="number" class="form-control" id="stock" name="stock" required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-primary" id="saveChangesButton">Guardar Cambios</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-	<script>
-		$(document).ready(function() {
-			$('#tablaInventario').DataTable();
+    <!-- Include jQuery and DataTables scripts -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
 
-			// Add event listener to the "Editar" buttons
-			$('.editar-activo').click(function() {
+    <!-- Include Bootstrap and DataTables Bootstrap plugin -->
+    <script src="assets/bootstrap/bootstrap/js/bootstrap.min.js"></script>
+    <script src="assets/datatables-plugins/dataTables.bootstrap.min.js"></script>
+
+    <!-- Your custom JavaScript code -->
+    <script>
+        $(document).ready(function() {
+            // Initialize the DataTable
+            $('#tablaInventario').DataTable();
+
+            // Add event listener to the "Editar" buttons
+            $(document).on('click', '.editar-activo', function() {
 				// Extract the asset ID from the data-assetid attribute
 				var assetId = $(this).data('assetid');
 				openEditModal(assetId);
-				console.log(assetId);
-
 			});
 
-			// Function to open the modal and fetch asset data
-			function openEditModal(assetId) {
-				// Use AJAX to fetch asset data based on assetId
-				$.ajax({
-					type: "POST",
-					url: "../assets/js/getData.php",
-					data: { assetId: assetId },
-					success: function(data) {
-						codInvenSeleccionado = $(this).data('cod_inven');
-						console.log("cod_inven seleccionado:", codInvenSeleccionado);
-						if (response.success) {
-							// Populate the modal form fields with the fetched data
-							$('#editAssetForm input[name="cod_inven"]').val(response.asset.cod_inven);
-							$('#editAssetForm input[name="descripcion"]').val(response.asset.descripcion);
-							$('#editAssetForm input[name="factor"]').val(response.asset.factor);
-							$('#editAssetForm input[name="densidad"]').val(response.asset.densidad);
-							$('#editAssetForm input[name="stock"]').val(response.asset.stock);
+            // Function to open the modal and fetch asset data
+            function openEditModal(assetId) {
+                // Use AJAX to fetch asset data based on assetId
+                $.ajax({
+                    type: "POST",
+                    url: "../assets/js/getData.php",
+                    data: { assetId: assetId },
+                    dataType: "json",
+                    success: function(response) {
+						console.log(response);
+                        if (response.success) {
+                            var assetData = response.asset;
+                            var codInven = assetData.cod_inven;
+                            var descripcion = assetData.descripcion;
+                            var factor = assetData.factor;
+                            var densidad = assetData.densidad;
+                            var stock = assetData.stock;
 
-							// Show the modal
-							$('#editarActivo').modal('show');
-						} else {
-							// Handle error
-							alert(response.message); // You can display an error message here
-						}
-					},
-					error: function() {
-						// Handle AJAX error
-						alert('Error fetching asset data.');
-					}
-				});
-			}
+                            // Populate the modal fields with data
+                            $('#cod_inven').val(codInven);
+                            $('#descripcion').val(descripcion);
+                            $('#factor').val(factor);
+                            $('#densidad').val(densidad);
+                            $('#stock').val(stock);
 
-			// Handle saving changes in the modal
-			$('#saveChangesButton').click(function() {
-				// Use AJAX to send edited data to the server and update the database
-				$.ajax({
-					url: 'inventario.php',
-					method: 'POST',
-					data: $('#editAssetForm').serialize(),
-					success: function(response) {
-						if (response.success) {
-							$('#editarActivo').modal('hide');
-							// Optionally, update the asset data in the table without reloading the page
-						} else {
-							// Handle error
-							alert(response.message); // You can display an error message here
-						}
-					},
-					error: function() {
-						// Handle AJAX error
-						alert('Error updating asset data.');
-					}
-				});
-			});
-		});
+                            // Show the modal
+                            $('#editarActivo').modal('show');
+                        } else {
+                            // Handle error
+                            alert(response.message);
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.log('AJAX Error:', xhr, status, error);
+                        alert('Error fetching asset data.');
+                    }
+                });
+            }
 
-	  </script>
-	  
-	
+            // Handle saving changes in the modal
+            $('#saveChangesButton').click(function() {
+                // Use AJAX to send edited data to the server and update the database
+                $.ajax({
+                    type: "POST",
+                    url: "../assets/js/updateActivo.php", 
+                    data: $('#editAssetForm').serialize(),
+                    dataType: "json",
+                    success: function(response) {
+                        if (response.success) {
+                            $('#editarActivo').modal('hide');
+                            location.reload();
+							alert(response.message);
+                        } else {
+                            // Handle error
+                            alert(response.message);
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.log('AJAX Error:', xhr, status, error);
+                        alert('Error updating asset data.');
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 <br><br><br><br>
 <div class="footer">
-	<p>2022 © Escollanos | Comercialización </p>
+    <p>2022 © Escollanos | Comercialización </p>
 </div>
 </html>

@@ -6,12 +6,12 @@ if (!empty($_POST['producto'])) {
     $suggest = "";
     $search = $_POST['producto'];
     
-    // Consulta SQL para buscar productos por descripción (insensible a mayúsculas y minúsculas)
+    // Consulta SQL para buscar productos por descripción
     $sql = "SELECT cod_inven, descripcion FROM activos WHERE descripcion ILIKE :search ORDER BY descripcion ASC";
     
     // Prepara la consulta
     $sth = $conexion->prepare($sql);
-    
+     
     // Bind de parámetros
     $sth->bindValue(':search', '%' . $search . '%', PDO::PARAM_STR);
     

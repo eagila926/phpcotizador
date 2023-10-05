@@ -15,7 +15,7 @@ if (isset($_POST['codOdoo'])) {
                 FROM activos
                 WHERE cod_inven = :codOdoo";
 
-        // Prepara la consulta SQL
+        // Prepara la consulta SQL    
         $sth = $conexion->prepare($sql);
 
         // Asocia el parámetro codOdoo con el valor recibido
