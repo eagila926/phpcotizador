@@ -37,7 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($stmt->execute()) {
         // Éxito
-        echo '<script>console.log("Cotización guardada con éxito.")</script>';
+        echo "Cotización guardada con éxito.";
     } else {
         // Error
         echo "Error al guardar la cotización.";

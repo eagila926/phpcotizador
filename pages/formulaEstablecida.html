@@ -2,7 +2,7 @@
 <html lang="es">
 
 <head>
-    <link rel="shortcut icon" href="">
+    <link rel="shortcut icon" href="../assets/images/favicon.ico">
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -37,7 +37,7 @@
     <div class="container text-center:">
 
         <div class="col-md-12">
-            <h3>Formula No Establecida</h3>
+            <h3>Formulas Establecidas</h3>
             <div class="panel panel-default">
                 <div class="panel-heading"><strong class="panel-title">Formulario</strong></div>
                 <div class="panel-body">
@@ -49,8 +49,8 @@
                             <div class="col-lg-12">
                                 <div class="form-group">
                                     <div class="form-group">
-                                        <label for="activos">Activo:</label>
-                                        <input type="text" class="form-control" id="activos" name="activos"
+                                        <label for="formula">Activo:</label>
+                                        <input type="text" class="form-control" id="formula" name="formula"
                                             placeholder="Ingrese el nombre del activo" autocomplete="off">
                                     </div>
                                 </div>
@@ -91,7 +91,7 @@
                     </form>
                     <!-- Tabla para mostrar los activos ingresados -->
                     <h3>Activos Ingresados</h3>
-                    <table class="table table-bordered" id="tablaActivos">
+                    <table class="table table-bordered" id="tablaFormula">
                         <thead>
                             <tr>
                                 <th>Codigo Odoo</th>
@@ -100,7 +100,7 @@
                                 <th>Unidad</th>
                             </tr>
                         </thead>
-                        <tbody id="tbodyActivos">
+                        <tbody id="tbodyFormula">
                             <!-- Las filas de activos se agregarán aquí con JavaScript -->
                         </tbody>
                     </table>
@@ -165,7 +165,7 @@
         $(document).ready(function () {
 
             $(document).ready(function () {
-            $('#tablaActivos').DataTable({
+            $('#tablaFormula').DataTable({
                 responsive: true
             });
         });
@@ -221,10 +221,10 @@
                     unidad: unidad
                 });
 
-                $('#tablaActivos').dataTable().fnDestroy();
+                $('#tablaFormula').dataTable().fnDestroy();
 
                 // Agregar el activo a la tabla
-                var tabla = document.getElementById("tbodyActivos");
+                var tabla = document.getElementById("tbodyFormula");
                 var fila = tabla.insertRow();
                 var celdaCodOdoo = fila.insertCell(0);
                 var celdaActivo = fila.insertCell(1);
@@ -236,14 +236,13 @@
                 celdaCantidad.innerHTML = cantidad;
                 celdaUnidad.innerHTML = unidad;
 
-                
-
                 // Limpiar los campos del formulario
                 limpiarCampos();
             } else {
                 console.log("no entre al if");
                 alert("Por favor, complete todos los campos antes de agregar el activo.");
             }
+
         }
 
         // Asignar el evento de clic al botón "Agregar Activo"

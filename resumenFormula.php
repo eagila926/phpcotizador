@@ -1,15 +1,15 @@
 <?php
 require_once('config/config.php'); // Incluye el archivo de configuración
 include('include/header.php');
-
 // Recibe los datos del formulario
+$codFormu = $_POST['codigo'];
 $nombreFormula = $_POST['nombre'];
 $diasTratamiento = $_POST['dias'];
 $activosIngresados = json_decode($_POST['activosIngresados'], true); // Decodifica la cadena JSON
 
-// Luego, puedes gen    |erar la página de resumen (resumenFormula.html) con los datos
 $html = file_get_contents("pages/resumenFormula.html");
 $html = str_replace('{menufarmacia}', $menufarmacia, $html);
+$html = str_replace('{codigo}', $codFormu, $html);
 $html = str_replace('{nombre}', $nombreFormula, $html);
 $html = str_replace('{dias}', $diasTratamiento, $html);
 
@@ -30,7 +30,7 @@ $html = str_replace('{tablaActivosIngresados}', $tableHtml, $html);
 $detallesActivos = array();
 foreach ($activosIngresados as $activo) {
     $codInven = $activo['codOdoo'];
-    $sql = "SELECT cod_inven, descripcion, unidad_compra, factor, densidad, tipo FROM activos WHERE cod_inven = :codInven";
+    $sql = "SELECT cod_inven, descripcion, valor_costo, valor_venta, unidad_compra, factor, densidad, tipo FROM activos WHERE cod_inven = :codInven";
     $stmt = $conexion->prepare($sql);
     $stmt->bindParam(':codInven', $codInven, PDO::PARAM_INT);
     $stmt->execute();
@@ -42,6 +42,8 @@ foreach ($activosIngresados as $activo) {
         $detallesActivos[] = $result;
     }
 }
+
+//echo "<script>console.log('Arreglo: " . json_encode($detallesActivos) . "');</script>";
 
 // Inicializa la variable $vTotal
 $vTotal = 0;
@@ -151,22 +153,12 @@ if ($result) {
 //seleccionar exipiente segun los activos de la formula
 $contadorProbioticos = 0; // Contador para activos de tipo "PROBIOTICO"
 
-foreach ($detallesActivosModificados as $detalle) {
-    $codInven = isset($activo['codOdoo']) ? $activo['codOdoo'] : '';
-    $sql = "SELECT cod_inven, descripcion, unidad_compra, factor, densidad, tipo FROM activos WHERE cod_inven = :codInven";
-    $stmt = $conexion->prepare($sql);
-    $stmt->bindParam(':codInven', $codInven, PDO::PARAM_INT);
-    $stmt->execute();
-    $result = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    if ($result) {
-        $detallesActivos[] = $result;
-        
+foreach ($detallesActivos as $detalle) {   
         // Incrementa el contador si el tipo es "PROBIOTICO"
-        if ($result['tipo'] === "PROBIOTICO") {
+        if ($detalle['tipo'] === "PROBIOTICO") {
             $contadorProbioticos++;
         }
-    }
+    
 }
 
 // Lógica para agregar el activo según el contador
@@ -195,7 +187,7 @@ if (!in_array($activoSeleccionado, $detallesActivosModificados)) {
 
     $cantidadExipiente = $capXcap*$activoSeleccionado['densidad'];
 
-    $activoSeleccionado['cantidad'] = number_format($cantidadExipiente, 4);
+    $activoSeleccionado['cantidad'] = number_format($cantidadExipiente, 4)*$cDiaria;
     $activoSeleccionado['unidad']='g';
     $detallesActivosModificados[] = $activoSeleccionado;
 }
@@ -215,7 +207,7 @@ foreach ($detallesActivosModificados as $detalle) {
         // Manejar el caso donde la densidad es cero, por ejemplo, asignando un valor predeterminado
         $vCap = 0;
     }
-    $mfF = $mfC * $cantidadCap;
+    $mfF = $mfC * $diasTratamiento;
 
     $detallesHtml .= '<tr>';
     $detallesHtml .= '<td>' . $detalle['cod_inven'] . '</td>';
@@ -244,7 +236,9 @@ foreach ($detallesActivosModificados as $detalle) {
     $detallesArray[] = $detalleArray;
 }
 
-echo "<script>console.log('Arreglo: " . json_encode($detallesArray) . "');</script>";
+// echo "<script>console.log('Arreglo: " . json_encode($detallesActivos) . "');</script>";
+// echo "<script>console.log('------------------------------------------------');</script>";
+// echo "<script>console.log('Arreglo: " . json_encode($detallesArray) . "');</script>";
 
 
 // Agrega la variable $vTotal al final de la tabla
@@ -252,11 +246,51 @@ $detallesHtml .= '<tr><td colspan="6"></td><td><strong>Total:</strong></td><td>'
 
 $html = str_replace('{tablaResumen}', $detallesHtml, $html);
 
-$tablaPrecios = '';
-foreach($detalleArray as $detalle){
+//consultar los precios de los activos e insumos usados
+$detallesPrecios = array();
+foreach ($detallesArray as $detalle) {
+    $codInven = $detalle['cod_inven'];
+    $sql = "SELECT cod_inven, descripcion, valor_costo, valor_venta FROM activos WHERE cod_inven = :cod_inven";
+    $stmt = $conexion->prepare($sql);
+    $stmt->bindParam(':cod_inven', $codInven, PDO::PARAM_INT);
+    $stmt->execute();
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
+    if ($detalle['unidad']==="und") {
+        $result['cantidad'] = $detalle['cantidad'];
+        $detallesPrecios[] = $result;
+    }elseif ($detalle['unidad']==="g" || "mg"||"mcg"||"UI"){
+        $result['cantidad'] = $detalle['mfF'];
+        $detallesPrecios[] = $result;
+    }
+
+    
+}
+echo "<script>console.log('Arreglo: " . json_encode($detallesPrecios) . "');</script>";
+$totFormulaCosto = 0;
+$totFormulaVenta = 0;
+$tablaPrecios = '';
+foreach ($detallesPrecios as $detalle) {    
+    $tablaPrecios .= '<tr>';
+    $tablaPrecios .= '<td>' . $detalle['cod_inven'] . '</td>';
+    $tablaPrecios .= '<td>' . $detalle['descripcion'] . '</td>';
+    $tablaPrecios .= '<td>' . $detalle['cantidad'] . '</td>';
+    $tablaPrecios .= '<td>' . $detalle['valor_costo'] . '</td>';
+    $tablaPrecios .= '<td>' . $detalle['valor_venta'] . '</td>';
+    $totActivoCompra=$detalle['cantidad']*$detalle['valor_costo'];
+    $totActivoVenta=$detalle['cantidad']*$detalle['valor_venta'];
+    $tablaPrecios .= '<td>' . number_format($totActivoCompra, 2) . '</td>';
+    $tablaPrecios .= '<td>' . number_format($totActivoVenta, 2) . '</td>';
+    $tablaPrecios .= '</tr>';
+
+    $totFormulaCosto += $totActivoCompra;
+    $totFormulaVenta += $totActivoVenta;
 
 }
+
+$tablaPrecios .= '<tr><td colspan="4"></td><td><strong>Total:</strong></td><td>' . number_format($totFormulaCosto, 2) . '</td><td>' . number_format($totFormulaVenta, 2) . '</td></tr>';
+
+$html = str_replace('{tablaCostos}', $tablaPrecios, $html);
 
 echo $html;
 ?>

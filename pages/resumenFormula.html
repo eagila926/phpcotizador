@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-	<link rel="shortcut icon" href="images/favicon.ico">
+	<link rel="shortcut icon" href="../assets/images/favicon.ico">
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -29,6 +29,7 @@
 		<div class="col-lg-1"></div>
 		<div class="col-lg-9">
 			<h2>Formula: {nombre}</h2>
+			<h2>Codigo Formula: {codigo}</h2>
 			<h2>Dias de tratamiento: {dias}</h2>
 			<h2>Dosis diaria: {cDiaria}</h2>
 			<table class="table table-bordered" id="tablaResumen">
@@ -53,6 +54,7 @@
             <br>
             <div class="col-lg-1"></div>
             <div class="col-lg-11" style="margin-left:50px">
+				<h3>Resumen pesaje de activos</h3>
 				
                 <table class="table table-bordered" id="tablaDetalles">
                     <thead>
@@ -71,6 +73,33 @@
                     </thead>
                     <tbody>
                     	{tablaResumen}
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+
+		<div class="row">
+            <br>
+            <div class="col-lg-1"></div>
+            <div class="col-lg-11" style="margin-left:50px">
+				<h3>Resumen de precios de la formula</h3>
+				
+                <table class="table table-bordered" id="tablaDetalles">
+                    <thead>
+                        <tr>
+                            <th>Codigo</th>
+                            <th>Descripción</th>
+                            <th>Cantidad total(g)</th>
+                            <th>Valor Compra</th>
+                            <th>Valor Venta</th>
+                            <th>Total Compra</th>
+							<th>Total Venta</th>
+                            
+                        </tr>
+                    </thead>
+                    <tbody>
+                    	{tablaCostos}
                     </tbody>
                 </table>
 
