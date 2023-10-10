@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Formulario de Usuarios</title>
+    <link rel="shortcut icon" href="../assets/images/favicon.ico">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="">
+	<meta name="author" content="">
+	<title>Escollanos</title>
+	<!-- Bootstrap Core CSS -->
+	<link href="assets/bootstrap/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+	<link href="assets/datatables-plugins/dataTables.bootstrap.css" rel="stylesheet">
+	<!-- DataTables Responsive CSS -->
+	<link href="assets/datatables-responsive/dataTables.responsive.css" rel="stylesheet">
+	<!-- MetisMenu CSS -->
+	<link href="assets/metisMenu/metisMenu.min.css" rel="stylesheet">
+	<!-- Morris Charts CSS -->
+	<link href="assets/morrisjs/morris.css" rel="stylesheet">
+	<!-- Custom Fonts -->
+	<link href="assets/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+    {menufarmacia}
+    <div class="row">
+        <br>
+        <div class="col-lg-2"></div>
+        <div class="col-lg-8" style="margin-left:50px">
+            <div class="panel panel-default">
+                <div class="panel-heading"><strong class="panel-title">Registro de Usuario</strong></div>
+                <div class="panel-body">
+                    <form action="registro.php" method="POST">
+                        <div class="row">
+                            <div class="col-lg-5">
+                                <div class="form-group">
+                                    <label for="nombre">Nombre:</label>
+                                    <input class="form-control" type="text" id="nombre" name="nombre" required autocomplete="off" onchange="generarNombreUsuario()">
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label for="apellido">Apellido:</label>
+                                    <input class="form-control" type="text" id="apellido" name="apellido" required autocomplete="off" onchange="generarNombreUsuario()">
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="form-group">
+                                    <label for="username">Nombre de Usuario:</label>
+                                    <input class="form-control" type="text" id="username" name="username" required autocomplete="off">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label for="ciudad">Ciudad:</label>
+                                    <input class="form-control" type="text" id="ciudad" name="ciudad" autocomplete="off" required >
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label for="nivel">País</label>
+                                    <select class="form-control" id="pais" name="pais">
+                                        <option value=""></option>
+                                        <option value="Ecuador">Ecuador</option>
+                                        <option value="Colombia">Colombia</option>
+                                        <option value="Chile">Chile</option>
+                                        <option value="Peru">Peru</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="correo">Correo Electrónico:</label>
+                            <input class="form-control" type="email" id="correo" name="correo" required >
+                        </div>
+                        <div class="form-group">
+                            <div class="form-group">
+                                <label for="nivel">Nivel</label>
+                                <select class="form-control" id="nivel" name="nivel">
+                                    <option value=""></option>
+                                    <option value="T">Laboratorio</option>
+                                    <option value="F">Facturacion</option>
+                                    <option value="D">Distribuidor</option>
+                                    <option value="E">Usuario Extranjero</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="contrasena">contrasena:</label>
+                            <input class="form-control" type="password" id="contrasena" name="contrasena" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="activo">Activo:</label>
+                            <input type="checkbox" id="activo" name="activo" checked>
+                        </div>                
+                        <input type="button" id="guardar-btn" value="Guardar" onclick="enviarYLimpiar()">
+
+                    </form>
+        
+                </div>
+            </div>
+        
+        
+        </div>
+        <div class="col-lg-2"></div>
+
+        <script>
+            function generarNombreUsuario() {
+                var nombre = document.getElementById("nombre").value;
+                var apellido = document.getElementById("apellido").value;
+                var username = nombre.charAt(0).toLowerCase() + apellido.toLowerCase();
+                document.getElementById("username").value = username;
+            }
+
+            function enviarYLimpiar() {
+                // Enviar el formulario
+                document.getElementById("mi-formulario").submit();
+
+                // Limpiar los campos
+                document.getElementById("nombre").value = "";
+                document.getElementById("apellido").value = "";
+                document.getElementById("ciudad").value = "";
+                document.getElementById("pais").value = "";
+                document.getElementById("username").value = "";
+                document.getElementById("correo").value = "";
+                document.getElementById("nivel").value = "";
+                document.getElementById("contrasena").value = "";
+                document.getElementById("activo").checked = true; // Opcional: establece la casilla "Activo" en marcada
+            }
+        </script>
+            
+
+    
+</body>
+</html>
