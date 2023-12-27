@@ -75,7 +75,7 @@
 
                         <div class="form-group">
                             <label for="correo">Correo Electrónico:</label>
-                            <input class="form-control" type="email" id="correo" name="correo" required >
+                            <input class="form-control" type="email" id="correo" name="correo" required autocomplete="off">
                         </div>
                         <div class="form-group">
                             <div class="form-group">
@@ -90,14 +90,14 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="contrasena">contrasena:</label>
+                            <label for="contrasena">Contraseña:</label>
                             <input class="form-control" type="password" id="contrasena" name="contrasena" required>
                         </div>
                         <div class="form-group">
                             <label for="activo">Activo:</label>
                             <input type="checkbox" id="activo" name="activo" checked>
                         </div>                
-                        <input type="button" id="guardar-btn" value="Guardar" onclick="enviarYLimpiar()">
+                        <button type="submit" name="submit" class="btn btn-primary">Registrar</button>
 
                     </form>
         
@@ -107,33 +107,17 @@
         
         </div>
         <div class="col-lg-2"></div>
-
         <script>
+
             function generarNombreUsuario() {
                 var nombre = document.getElementById("nombre").value;
                 var apellido = document.getElementById("apellido").value;
                 var username = nombre.charAt(0).toLowerCase() + apellido.toLowerCase();
                 document.getElementById("username").value = username;
             }
-
-            function enviarYLimpiar() {
-                // Enviar el formulario
-                document.getElementById("mi-formulario").submit();
-
-                // Limpiar los campos
-                document.getElementById("nombre").value = "";
-                document.getElementById("apellido").value = "";
-                document.getElementById("ciudad").value = "";
-                document.getElementById("pais").value = "";
-                document.getElementById("username").value = "";
-                document.getElementById("correo").value = "";
-                document.getElementById("nivel").value = "";
-                document.getElementById("contrasena").value = "";
-                document.getElementById("activo").checked = true; // Opcional: establece la casilla "Activo" en marcada
-            }
         </script>
-            
-
+        
+        
     
 </body>
 </html>

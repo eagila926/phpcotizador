@@ -94,6 +94,7 @@
                     <table class="table table-bordered" id="tablaActivos">
                         <thead>
                             <tr>
+                                <th>Acción</th>
                                 <th>Codigo Odoo</th>
                                 <th>Activo</th>
                                 <th>Cantidad</th>
@@ -186,9 +187,7 @@
                             $('.suggest-element').click(function (e) {
                                 // Obtener el valor de cod_inven
                                 codInvenSeleccionado = $(this).data('cod_inven');
-                                console.log("Texto del elemento seleccionado:", $(this).text());
-                                console.log("cod_inven seleccionado:", codInvenSeleccionado);
-
+                
                                 // Editar el valor del campo activos con la descripción de la sugerencia pulsada
                                 $('#activos').val($(this).text());
                                 // Ocultar el resto de sugerencias
@@ -206,14 +205,9 @@
             var cantidad = $("#cant").val(); // Obtener el valor del campo cant
             var unidad = $("select[name='unidad']").val(); // Obtener el valor del campo unidad
 
-            console.log("activo:", activo);
-            console.log("cantidad:", cantidad);
-            console.log("unidad:", unidad);
-            console.log("codInvenSeleccionado:", codInvenSeleccionado);
-
             if (codInvenSeleccionado && activo && cantidad && unidad) {
                 // Agregar el activo al arreglo con cod_inven
-                console.log("entre al if", activosIngresados);
+                console.log(activosIngresados);
                 activosIngresados.push({
                     codOdoo: codInvenSeleccionado,
                     activo: activo,
@@ -226,11 +220,23 @@
                 // Agregar el activo a la tabla
                 var tabla = document.getElementById("tbodyActivos");
                 var fila = tabla.insertRow();
-                var celdaCodOdoo = fila.insertCell(0);
-                var celdaActivo = fila.insertCell(1);
-                var celdaCantidad = fila.insertCell(2);
-                var celdaUnidad = fila.insertCell(3);
+                var celdaEliminar = fila.insertCell(0);
+                var celdaCodOdoo = fila.insertCell(1);
+                var celdaActivo = fila.insertCell(2);
+                var celdaCantidad = fila.insertCell(3);
+                var celdaUnidad = fila.insertCell(4);
 
+
+                var botonEliminar = document.createElement("button");
+                botonEliminar.className = "btn btn-danger btnEliminar";
+                botonEliminar.innerText = "Eliminar";
+                // Obtén la posición actual del activo en el arreglo
+                var activoPos = activosIngresados.length;
+
+                // Asignar la posición del activo en el arreglo como atributo personalizado
+                botonEliminar.setAttribute("data-activo-pos", activoPos);
+
+                celdaEliminar.appendChild(botonEliminar);
                 celdaCodOdoo.innerHTML = codInvenSeleccionado;
                 celdaActivo.innerHTML = activo;
                 celdaCantidad.innerHTML = cantidad;
@@ -241,10 +247,28 @@
                 // Limpiar los campos del formulario
                 limpiarCampos();
             } else {
-                console.log("no entre al if");
-                alert("Por favor, complete todos los campos antes de agregar el activo.");
+                alert("Complete todos los campos antes de agregar el activo.");
             }
         }
+
+        $(document).on("click", ".btnEliminar", function () {
+            // Obtener la posición del activo desde el atributo personalizado
+            var activoPos = $(this).data("activo-pos");
+            console.log("Posicion:", activoPos);
+
+            // Eliminar el activo del arreglo "activosIngresados" utilizando la posición
+            var posReal = activoPos-1;
+            console.log("Posicion:", posReal);
+            activosIngresados.splice(posReal, 1);
+
+            // Obtener la fila padre del botón actual
+            var row = $(this).closest("tr");
+
+            // Eliminar la fila
+            row.remove();
+
+            console.log(activosIngresados);
+        });
 
         // Asignar el evento de clic al botón "Agregar Activo"
         var btnAgregar = document.querySelector(".btnAgregar");

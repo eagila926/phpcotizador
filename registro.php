@@ -3,7 +3,7 @@ require_once('config/config.php');
 include ('include/header.php');
 
 // Verifica si el formulario se envió y el botón "Guardar" fue presionado
-if (isset($_POST["guardar"])) {
+if (isset($_POST["submit"])) {
     // Recupera los valores del formulario
     $nombre = $_POST["nombre"];
     $apellido = $_POST["apellido"];
@@ -42,8 +42,10 @@ if (isset($_POST["guardar"])) {
         $stmt->execute();
 
         // Redireccionar o mostrar un mensaje de éxito
-        // header("Location: exito.html");
-        echo "Registro exitoso.";
+        //header("Location: index.php");
+        $response = array("status" => "success", "message" => "Registro exitoso.");
+        
+        echo '<script language="javascript">alert('. json_encode($response) . ');</script>';
 
     } catch (PDOException $e) {
         echo "Error al procesar el formulario: " . $e->getMessage();
