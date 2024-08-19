@@ -13,14 +13,14 @@ if (isset($_POST["submit"])) {
     $correo = $_POST["correo"];
     $nivel = $_POST["nivel"];
     $contrasena = $_POST["contrasena"]; 
-    $activo = isset($_POST["activo"]) ? 1 : 0; // Si el checkbox está marcado, establece activo en 1; de lo contrario, en 0.
+    $estado = 1; // Estado activo por defecto // Si el checkbox está marcado, establece estado es activo en 1; de lo contrario, en 0.
 
     try {
         $conexion->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
         // Preparar la consulta SQL para insertar un nuevo usuario
-        $sql = "INSERT INTO usuarios (nombre, apellido, ciudad, pais, username, correo, nivel, contraseña, activo) 
-                VALUES (:nombre, :apellido, :ciudad, :pais, :username, :correo, :nivel, :contrasena, :activo)"; // Cambiado a ":contrasena"
+        $sql = "INSERT INTO usuarios (nombre, apellido, ciudad, pais, username, correo, nivel, contrasena, estado) 
+                VALUES (:nombre, :apellido, :ciudad, :pais, :username, :correo, :nivel, :contrasena, :estado)"; // Cambiado a ":contrasena"
 
         $stmt = $conexion->prepare($sql);
 
@@ -36,7 +36,7 @@ if (isset($_POST["submit"])) {
         $stmt->bindParam(':correo', $correo);
         $stmt->bindParam(':nivel', $nivel);
         $stmt->bindParam(':contrasena', $contrasenaEncriptada); // Cambiado a ":contrasena"
-        $stmt->bindParam(':activo', $activo);
+        $stmt->bindParam(':estado', $estado);
 
         // Ejecutar la consulta
         $stmt->execute();
@@ -48,7 +48,15 @@ if (isset($_POST["submit"])) {
         echo '<script language="javascript">alert('. json_encode($response) . ');</script>';
 
     } catch (PDOException $e) {
-        echo "Error al procesar el formulario: " . $e->getMessage();
+        if ($e->getCode() == "23505") {
+            // Se ha producido un error de violación de unicidad (Unique violation)
+            $errorMessage = "Error al procesar el formulario: " . $e->getMessage();
+            $response = array("status" => "error", "message" => $errorMessage);
+            echo '<script language="javascript">alert('. json_encode($response) . ');</script>';
+        } else {
+            // Otro tipo de error
+            echo "Error al procesar el formulario: " . $e->getMessage();
+        }
     }
 } else {
     // El formulario no se ha enviado
@@ -58,4 +66,4 @@ if (isset($_POST["submit"])) {
 $html = file_get_contents("pages/registro.html");
 $html = str_replace('{menufarmacia}', $menufarmacia, $html);
 echo $html;
-?>
+?> 
